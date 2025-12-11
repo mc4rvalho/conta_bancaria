@@ -30,7 +30,7 @@ export class ContaController implements ContaRepository {
     } else
       console.log(colors.fg.red, "\nA Conta número: " + numero + " não foi encontrada!", colors.reset);
   }
-  
+
   atualizar(conta: Conta): void {
     let buscaConta = this.buscarNoArray(conta.numero);
 
@@ -52,13 +52,37 @@ export class ContaController implements ContaRepository {
   }
 
   sacar(numero: number, valor: number): void {
-    throw new Error("Method not implemented.");
+    let conta = this.buscarNoArray(numero);
+
+    if (conta != null) {
+
+      if (conta.sacar(valor) == true)
+        console.log(colors.fg.green, "\nO Saque na Conta número: " + numero + " foi efetuado com sucesso!", colors.reset);
+    } else
+      console.log(colors.fg.green, "\nA Conta número: " + numero + " não foi encontrada!", colors.reset);
   }
+
   depositar(numero: number, valor: number): void {
-    throw new Error("Method not implemented.");
+    let conta = this.buscarNoArray(numero);
+
+    if (conta != null) {
+      conta.depositar(valor);
+      console.log(colors.fg.green, "\nO Depósito na Conta número: " + numero + " foi efetuado com sucesso!", colors.reset);
+    } else
+      console.log(colors.fg.red, "\nA Conta número: " + numero + " não foi encontrada!", colors.reset);
   }
+
   transferir(numeroOrigem: number, numeroDestino: number, valor: number): void {
-    throw new Error("Method not implemented.");
+    let contaOrigem = this.buscarNoArray(numeroOrigem);
+    let contaDestino = this.buscarNoArray(numeroDestino);
+
+    if (contaOrigem != null && contaDestino != null) {
+      if (contaOrigem.sacar(valor) == true) {
+        contaDestino.depositar(valor);
+        console.log(colors.fg.green, "A Transferência da Conta número: " + numeroOrigem + " para a Conta número: " + numeroDestino + " foi efetuada com sucesso!", colors.reset);
+      }
+    } else
+      console.log(colors.fg.red, "\nA Conta número: " + numeroOrigem + " e/ou a Conta número: " + numeroDestino + " não foram encontradas!", colors.reset);
   }
 
   //Checa se uma Conta existe
